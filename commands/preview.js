@@ -1,17 +1,7 @@
-const server = require('node-http-server')
+const server = require('./../lib/server')
 
-function serverReady(server) {
-  console.log(`Server on port ${server.config.port} is now up`)
-}
-
-function preview() {
-  server.deploy(
-    {
-      port: 8080,
-      root: './build'
-    },
-    serverReady
-  )
+function preview(port, root) {
+  server.run(port, root)
 }
 
 module.exports = preview

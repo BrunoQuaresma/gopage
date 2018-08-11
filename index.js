@@ -4,6 +4,9 @@ const program = require('commander')
 const build = require('./commands/build')
 const preview = require('./commands/preview')
 
+const DEFAULT_PORT = 8080
+const DEFAULT_ROOT = './build'
+
 program
   .version('0.1.0')
   .command('build')
@@ -16,6 +19,6 @@ program
 program
   .command('preview')
   .description('See your preview page in the browser')
-  .action(() => preview())
+  .action(() => preview(DEFAULT_PORT, DEFAULT_ROOT))
 
 program.parse(process.argv)
