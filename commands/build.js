@@ -1,4 +1,5 @@
 const fs = require('fs-extra')
+const path = require('path')
 const mustache = require('mustache')
 const _ = require('lodash')
 
@@ -117,7 +118,7 @@ function build(configPath) {
   config = JSON.parse(mustache.render(JSON.stringify(config), config.variables))
 
   const name = config.name || 'index'
-  const wrapper = config.wrapper || './wrapper.html'
+  const wrapper = config.wrapper || path.resolve(__dirname, './../wrapper.html')
   const body = renderBody(config)
   let content = wrap(body, wrapper)
   content = loadDependencies(content, config)
