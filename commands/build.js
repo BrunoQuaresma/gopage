@@ -2,7 +2,7 @@ const fs = require('fs-extra')
 const mustache = require('mustache')
 const _ = require('lodash')
 const loadConfig = require('./../lib/loadConfig')
-const schemas = require('./../lib/schemas')
+const dependencies = require('./../lib/dependencies')
 
 function renderSection(section) {
   const sectionSchema = fs.readJsonSync(section.path)
@@ -39,13 +39,11 @@ function savePage(name, content) {
 }
 
 function loadDependencies(content, config) {
-  let dependencies = schemas(config).map(schema => schema.dependencies)
-  dependencies = _.flattenDeep(dependencies).filter(dependencie => dependencie !== undefined)
-  dependencies = _.uniqBy(dependencies, d => d.path)
+  items = dependencies.load(config)
 
-  let styles = dependencies.filter(d => d.type === 'css')
-  const jsTop = dependencies.filter(d => d.type === 'js' && !d.bottom)
-  const jsBottom = dependencies.filter(d => d.type === 'js' && d.bottom)
+  let styles = items.filter(d => d.type === 'css')
+  const jsTop = items.filter(d => d.type === 'js' && !d.bottom)
+  const jsBottom = items.filter(d => d.type === 'js' && d.bottom)
 
   const sectionsStyles = makeSectionStyles(config)
   styles = styles.concat(sectionsStyles)
