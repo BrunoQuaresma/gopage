@@ -1,7 +1,7 @@
 const fs = require('fs-extra')
 const mustache = require('mustache')
 const _ = require('lodash')
-const loadConfig = require('./../lib/loadConfig')
+const Config = require('./../lib/config')
 const DependencyList = require('./../lib/dependencyList')
 
 function renderSection(section) {
@@ -23,6 +23,7 @@ function renderSection(section) {
 
 function renderBody(config) {
   return config
+    .values
     .sections
     .map(renderSection)
     .join('')
@@ -43,7 +44,7 @@ function loadDependencies(content, config) {
   const styles = dependencies.styles()
   const scripts = dependencies.scripts()
 
-  const sectionsStyles = makeSectionStyles(config)
+  const sectionsStyles = makeSectionStyles(config.values)
   styles.add(sectionsStyles)
 
   content = renderStyles(styles, content)
@@ -107,12 +108,12 @@ function renderScriptsBottom(scripts, content) {
 }
 
 function build(configPath) {
-  const config = loadConfig(configPath)
+  const config = new Config(configPath)
   const body = renderBody(config)
-  let content = wrap(body, config.wrapper)
+  let content = wrap(body, config.values.wrapper)
   content = loadDependencies(content, config)
 
-  savePage(config.name, content)
+  savePage(config.values.name, content)
 }
 
 module.exports = build
