@@ -2,6 +2,7 @@ const fs = require('fs-extra')
 const path = require('path')
 const mustache = require('mustache')
 const _ = require('lodash')
+const loadConfig = require('./../lib/loadConfig')
 
 function renderSection(section) {
   const sectionSchema = fs.readJsonSync(section.path)
@@ -114,9 +115,7 @@ function renderScriptsBottom(scripts, content) {
 }
 
 function build(configPath) {
-  let config = fs.readJsonSync(configPath)
-  config = JSON.parse(mustache.render(JSON.stringify(config), config.variables))
-
+  const config = loadConfig(configPath)
   const name = config.name || 'index'
   const wrapper = config.wrapper || path.resolve(__dirname, './../wrapper.html')
   const body = renderBody(config)
