@@ -2,7 +2,7 @@ const fs = require('fs-extra')
 const mustache = require('mustache')
 const _ = require('lodash')
 const loadConfig = require('./../lib/loadConfig')
-const Dependencies = require('./../lib/dependencies')
+const DependencyList = require('./../lib/dependencyList')
 
 function renderSection(section) {
   const sectionSchema = fs.readJsonSync(section.path)
@@ -39,7 +39,7 @@ function savePage(name, content) {
 }
 
 function loadDependencies(content, config) {
-  const dependencies = new Dependencies(config)
+  const dependencies = new DependencyList(config)
 
   let styles = dependencies.items.filter(d => d.type === 'css')
   const jsTop = dependencies.items.filter(d => d.type === 'js' && !d.bottom)
