@@ -1,7 +1,7 @@
-const server = require('./../lib/server')
+const runServer = require('./../lib/runServer')
 
 function preview(port, root) {
-  server.run(port, root)
+  runServer(port, root)
 }
 
 module.exports = preview
