@@ -1,5 +1,4 @@
 const fs = require('fs-extra')
-const path = require('path')
 const mustache = require('mustache')
 const _ = require('lodash')
 const loadConfig = require('./../lib/loadConfig')
@@ -116,13 +115,11 @@ function renderScriptsBottom(scripts, content) {
 
 function build(configPath) {
   const config = loadConfig(configPath)
-  const name = config.name || 'index'
-  const wrapper = config.wrapper || path.resolve(__dirname, './../wrapper.html')
   const body = renderBody(config)
-  let content = wrap(body, wrapper)
+  let content = wrap(body, config.wrapper)
   content = loadDependencies(content, config)
 
-  savePage(name, content)
+  savePage(config.name, content)
 }
 
 module.exports = build
