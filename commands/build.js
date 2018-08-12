@@ -40,17 +40,15 @@ function savePage(name, content) {
 
 function loadDependencies(content, config) {
   const dependencies = new DependencyList(config)
-
-  let styles = dependencies.items.filter(d => d.type === 'css')
-  const jsTop = dependencies.items.filter(d => d.type === 'js' && !d.bottom)
-  const jsBottom = dependencies.items.filter(d => d.type === 'js' && d.bottom)
+  const styles = dependencies.styles()
+  const scripts = dependencies.scripts()
 
   const sectionsStyles = makeSectionStyles(config)
-  styles = styles.concat(sectionsStyles)
+  styles.add(sectionsStyles)
 
   content = renderStyles(styles, content)
-  content = renderScriptsTop(jsTop, content)
-  content = renderScriptsBottom(jsBottom, content)
+  content = renderScriptsTop(scripts.top(), content)
+  content = renderScriptsBottom(scripts.bottom(), content)
 
   return content
 }
@@ -83,6 +81,7 @@ function makeSectionStyles(config) {
 
 function renderStyles(styles, content) {
   const stylesContent = styles
+                        .items
                         .map(style => `<link rel="stylesheet" href="${style.path}"/>`)
                         .join("\n")
 
@@ -91,6 +90,7 @@ function renderStyles(styles, content) {
 
 function renderScriptsTop(scripts, content) {
   const scriptsContent = scripts
+                        .items
                         .map(script => `<script src="${script.path}"></script>`)
                         .join("\n")
 
@@ -99,6 +99,7 @@ function renderScriptsTop(scripts, content) {
 
 function renderScriptsBottom(scripts, content) {
   const scriptsContent = scripts
+    .items
     .map(script => `<script src="${script.path}"></script>`)
     .join("\n")
 
